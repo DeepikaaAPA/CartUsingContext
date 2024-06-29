@@ -1,0 +1,39 @@
+.item-card{
+  margin:10px;
+  background-color: rgb(48, 48, 48);
+  color:white;
+  padding:20px;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+.item-card input{
+  width:20px;
+}
+.item-card .left{
+  width:70%;
+}
+
+h1{
+  text-align: center;
+  
+}
+.container{
+  display:flex;
+  flex-direction: column;
+  padding:25px;
+  background-color: lightgray;
+  margin:20px;
+}
+
+.btnQty{
+
+  padding-left: 5px;
+  padding-right:5px;
+  border:1px solid transparent;
+}
+.total{
+  text-align: center;
+  padding:15px 35px;
+}
