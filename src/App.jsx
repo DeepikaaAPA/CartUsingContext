@@ -4,17 +4,19 @@ import products from "./Data/products.json";
 import "./App.css";
 const TotalContext = createContext();
 function App() {
-  const [cart, setCart] = useState(products);
-  const initialTotal = cart
+ 
+  const initialTotal = products
     .map((p) => p.price)
     .reduce((sum, price) => sum + price, 0);
   console.log(initialTotal);
   const [total, setTotal] = useState(initialTotal);
+  const [cart, setCart] = useState({products,total});
+  console.log(cart)
   return (
     <TotalContext.Provider value={total}>
       <h1>Shopping Cart</h1>
       <div className="container">
-        {cart.map((p, index) => (
+        {cart.products.map((p, index) => (
           <ItemCard key={index} item={p} setTotal={setTotal}></ItemCard>
         ))}
       </div>
