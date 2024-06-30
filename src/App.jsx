@@ -37,6 +37,7 @@ function ItemCard({ setTotal, item }) {
   const [qty, setQty] = useState(1);
   const [price, setPrice] = useState(item.price);
   // const [prevPrice, setPrevPrice] = useState(price);
+  //setting prev price did not update correctly so setting qty instead
   const [prevQty, setPrevQty] = useState(1);
   useEffect(() => {
     setPrevQty(qty);
