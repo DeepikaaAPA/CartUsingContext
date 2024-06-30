@@ -18,12 +18,12 @@ function App() {
           <ItemCard key={index} item={p} setTotal={setTotal}></ItemCard>
         ))}
       </div>
-      <Total total={total} />
+      <Total  />
     </TotalContext.Provider>
   );
 }
-function Total({ total }) {
-  // const total = useContext(TotalContext);
+function Total() {
+   const total = useContext(TotalContext);
   return (
     <>
       <div className="total">
@@ -54,8 +54,8 @@ function ItemCard({ setTotal, item }) {
         <h4>Price per item: Rs.{item.price}</h4>
       </div>
       <div>
-        {total + "****" + prevQty + " --- " + price + "Total =  "}
-        {total + item.price * qty - prevQty * item.price}
+        {/* {total + "****" + prevQty + " --- " + price + "Total =  "}
+        {total + item.price * qty - prevQty * item.price} */}
         <h4>Price : Rs.{price}</h4>
         <button
           className="btnQty"
