@@ -24,7 +24,10 @@ h1 {
   background-color: lightgray;
   margin: 20px;
 }
-
+.btn-remove {
+  color: red;
+  background-color: beige;
+}
 .btnQty {
   padding-left: 5px;
   padding-right: 5px;
