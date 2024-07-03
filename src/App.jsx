@@ -10,7 +10,7 @@ function App() {
     .reduce((sum, price) => sum + price, 0);
   console.log(initialTotal);
   const [total, setTotal] = useState(initialTotal);
-  const [cart, setCart] = useState({products,total});
+  const [cart, setCart] = useState({products:[...products],total});
   console.log(cart)
   return (
     <TotalContext.Provider value={total}>
