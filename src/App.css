@@ -5,15 +5,26 @@
   padding: 20px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 .item-card input {
-  width: 20px;
+  width: 30px;
 }
 .item-card .left {
   width: 70%;
 }
-
+.item-description{
+  display: flex;
+  flex-direction: row;
+  gap:20px;
+}
+.desc{
+  align-self: center;
+}
+img{
+  height:100px;
+  width:100px;
+}
 h1 {
   text-align: center;
 }
@@ -37,8 +48,18 @@ h1 {
   text-align: center;
   padding: 15px 35px;
   color: aquamarine;
-  text-transform: uppercase;
-  text-decoration: underline;
+  text-align: right;
+
   border: solid 10px rgb(135, 137, 137);
   margin: 30px;
+  padding-right: 100px;
+}
+.total-quantity{
+  font-size: smaller;
+  color:white;
+  padding-right: 100px;
+}
+.remove-message {
+  color: red;
+  font-size: smaller;
 }

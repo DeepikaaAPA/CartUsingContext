@@ -2,17 +2,34 @@ import { useContext, createContext, useEffect, useState } from "react";
 import products from "./Data/products.json";
 
 import "./App.css";
-const TotalContext = createContext();
+const CartContext = createContext();
 function App() {
   const initialTotal = products
     .map((p) => p.price)
     .reduce((sum, price) => sum + price, 0);
   console.log(initialTotal);
+  const initialCart = products.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    pricePerItem: item.price,
+    qty: 1,
+    price: item.price,
+    img: item.thumbnail,
+  }));
   const [total, setTotal] = useState(initialTotal);
-  const [cart, setCart] = useState([...products]);
-  console.log(cart);
+  const [cart, setCart] = useState([...initialCart]);
+  const [totalQuantity, setTotalQuantity] = useState(initialCart.length);
+  console.log("initial cart", cart);
   return (
-    <TotalContext.Provider value={{ total: total, carts: [cart, setCart] }}>
+    <CartContext.Provider
+      value={{
+        total: total,
+        totalQuantity: totalQuantity,
+        setTotal: setTotal,
+        setTotalQuantity: setTotalQuantity,
+      }}
+    >
       <h1>Shopping Cart</h1>
       <div className="container">
         {cart.map((p, index) => (
@@ -20,54 +37,70 @@ function App() {
         ))}
       </div>
       <Total />
-    </TotalContext.Provider>
+    </CartContext.Provider>
   );
 }
 function Total() {
-  const { total } = useContext(TotalContext);
+  const { total, totalQuantity } = useContext(CartContext);
   return (
     <div className="total">
-      <h2>Total: Rs.{total}</h2>
+      <h2>
+        Total <span className="total-quantity">({totalQuantity} items)</span> :
+        Rs.{total}
+      </h2>
     </div>
   );
 }
-function ItemCard({ setTotal, item }) {
-  const { total, carts } = useContext(TotalContext);
-  const [cart, setCart] = carts;
-  const [qty, setQty] = useState(1);
+function ItemCard({ item }) {
+  const { setTotal, setTotalQuantity } = useContext(CartContext);
+  const [qty, setQty] = useState(item.qty);
   const [price, setPrice] = useState(item.price);
   // const [prevPrice, setPrevPrice] = useState(price);
   //setting prev price did not update correctly so setting qty instead
   const [prevQty, setPrevQty] = useState(1);
+  const [showRemove, setShowRemove] = useState(true);
   const handleRemove = () => {
     setQty(0);
-
   };
   useEffect(() => {
-    if(qty===0)
-      setCart((prev) => prev.filter((product) => product.id !== item.id));
     setPrevQty(qty);
     setPrice(qty * item.price);
-    setTotal(total + item.price * qty - prevQty * item.price);
+    setTotal(
+      (prevtotal) => prevtotal + item.price * qty - prevQty * item.price
+    );
+    setTotalQuantity((prev) => prev - prevQty + qty);
+    qty === 0 ? setShowRemove(false) : setShowRemove(true);
   }, [qty]);
   return (
     <div className="item-card">
       <div className="left">
         <h3>{item.title} </h3>
-        {/* <img src={item.thumbnail}></img> */}
-        <p>{item.description}</p>
-        <h4>Price per item: Rs.{item.price}</h4>
-        <button className="btn-remove" onClick={handleRemove}>
-          Remove item
-        </button>
+        <div className="item-description">
+          <img src={item.img}></img>
+
+          <span className="desc">{item.description}</span>
+        </div>
+
+        <h4>Price per item: Rs.{item.pricePerItem}</h4>
+        {showRemove ? (
+          <button className="btn-remove" onClick={handleRemove}>
+            Remove item
+          </button>
+        ) : null}
       </div>
       <div>
-        {/* {total + "****" + prevQty + " --- " + price + "Total =  "}
-        {total + item.price * qty - prevQty * item.price} */}
-        <h4>Price : Rs.{price}</h4>
+        {showRemove ? (
+          <h4>Price : Rs.{price}</h4>
+        ) : (
+          <>
+            <br></br>
+            <br></br>
+          </>
+        )}
+
         <button
           className="btnQty"
-          onClick={() => (qty > 1 ? setQty(qty - 1) : 1)}
+          onClick={() => (qty > 0 ? setQty((prev) => prev - 1) : 1)}
         >
           -
         </button>
@@ -75,17 +108,22 @@ function ItemCard({ setTotal, item }) {
           type="text"
           value={qty}
           onChange={(e) => {
-            if (e.target.value < 1) setQty(1);
-            else setQty(e.target.value);
+            if (e.target.value < 0 || isNaN(e.target.value)) setQty(1);
+            else setQty(+e.target.value);
           }}
         ></input>
-        <button
-          className="btnQty"
-          onClick={() => (qty < 200 ? setQty(qty + 1) : 200)}
-        >
+        <button className="btnQty" onClick={() => setQty((prev) => prev + 1)}>
           +
         </button>
-        {"state Qty" + qty}
+
+        <br></br>
+        {showRemove ? (
+          ""
+        ) : (
+          <p className="remove-message">
+            Item removed.<br></br> Increase quantity <br></br>to add it back.
+          </p>
+        )}
       </div>
     </div>
   );
